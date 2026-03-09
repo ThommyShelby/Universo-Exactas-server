@@ -4,10 +4,15 @@ const { MercadoPagoConfig, Preference, Payment } = require('mercadopago');
 const admin = require('firebase-admin');
 
 // 1. INICIALIZAR FIREBASE
-const serviceAccount = require('./credenciales-firebase.json');
+const admin = require('firebase-admin');
+
+// Leemos la clave secreta desde Render
+const serviceAccount = JSON.parse(process.env.FIREBASE_CREDENTIALS);
+
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
+
 const db = admin.firestore();
 
 // 2. AUTENTICACIÓN CON MERCADO PAGO
@@ -111,4 +116,5 @@ app.post('/webhook', async (req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en el puerto ${PORT}`);
+
 });
