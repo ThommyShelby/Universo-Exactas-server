@@ -1,12 +1,11 @@
 const express = require('express');
 const cors = require('cors');
 const { MercadoPagoConfig, Preference, Payment } = require('mercadopago');
+
+// 1. INICIALIZAR FIREBASE (Una sola vez)
 const admin = require('firebase-admin');
 
-// 1. INICIALIZAR FIREBASE
-const admin = require('firebase-admin');
-
-// Leemos la clave secreta desde Render
+// Leemos la clave secreta desde la variable de entorno de Render
 const serviceAccount = JSON.parse(process.env.FIREBASE_CREDENTIALS);
 
 admin.initializeApp({
@@ -46,11 +45,9 @@ app.post('/crear_preferencia', async (req, res) => {
           user_id: userId,
           pack_id: packId
         },
-        // ⚠️ TU TÚNEL NGROK PARA QUE MP AVISE CUANDO PAGUEN
-        notification_url: "https://dasyphyllous-unexonerative-neomi.ngrok-free.dev/webhook"
-        
-        // BORRAMOS back_urls y auto_return.
-        // MP no redirigirá a ningún lado. El usuario cerrará la pestaña y volverá a la app.
+        // ⚠️ CAMBIA ESTA URL POR LA QUE TE DIO RENDER
+        // Debe terminar en /webhook
+        notification_url: "https://universo-exactas-pagos.onrender.com/webhook"
       }
     });
 
@@ -116,5 +113,4 @@ app.post('/webhook', async (req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en el puerto ${PORT}`);
-
 });
